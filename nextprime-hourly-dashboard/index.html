@@ -55,6 +55,17 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
+    .refresh-button {
+      margin-left: auto;
+      border: 1px solid #b8c9c4;
+      border-radius: 6px;
+      background: #ffffff;
+      color: #155e57;
+      padding: 9px 14px;
+      font: inherit;
+      cursor: pointer;
+    }
+    .refresh-button:disabled { opacity: .65; cursor: wait; }
     .hero h1 {
       margin: 0;
       font-size: 38px;
@@ -371,6 +382,7 @@
   <div class="page">
     <section class="hero">
       <div class="hero-badge" id="heroBadge">2026-07 Hourly Alignment</div>
+      <button class="refresh-button" id="refreshButton" type="button" title="重新读取已发布数据">刷新数据</button>
       <h1>NEXT PRIME 大促分时联动</h1>
     </section>
 
@@ -1478,6 +1490,14 @@
     document.getElementById('hourFilter').addEventListener('change', renderAll);
     document.getElementById('currentDateFilter').addEventListener('change', renderAll);
     document.getElementById('compareDateFilter').addEventListener('change', renderAll);
+    document.getElementById('refreshButton').addEventListener('click', event => {
+      const button = event.currentTarget;
+      button.disabled = true;
+      button.textContent = '刷新中...';
+      const url = new URL(window.location.href);
+      url.searchParams.set('_refresh', Date.now().toString());
+      window.location.replace(url.toString());
+    });
     window.addEventListener('resize', () => Object.values(chartStore).forEach(chart => chart.resize()));
     renderAll();
   </script>
